@@ -1,0 +1,21 @@
+on:
+  push:
+    branches: [ "master" ]
+jobs: 
+  build-container: 
+    name: Build container
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build and push to Docker Hub
+        uses: docker/build-push-action@v2
+        with: 
+          context: .
+          push: true
+          tags: razvanrun/laravel-v9.2.1-docker:latest, razvanrun/laravel-v9.2.1-docker:${{ github.run_number }}
